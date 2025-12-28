@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from 'react'
 import {
   Actions,
@@ -8,8 +7,6 @@ import {
   CardTitle,
   Description,
   Eyebrow,
-  Feedback,
-  FeedbackStatus,
   Guidance,
   Option,
   OptionGroup,
@@ -25,13 +22,8 @@ import {
 } from './design-system/components'
 import { GlobalStyles, css, cx } from './design-system/emotion-lite'
 import { globalStyles } from './design-system/global-styles'
-import type { Question } from './mockQuestions'
-import { questionSections } from './mockQuestions'
-
-type AnswerResult =
-  | { status: 'correct'; message: string }
-  | { status: 'partial'; message: string }
-  | { status: 'incorrect'; message: string }
+import type { Question, QuestionSection } from './types'
+import questionData from './mocks/mock-question.json'
 
 type QuestionWithSection = Question & {
   sectionId: string
@@ -41,7 +33,7 @@ type QuestionWithSection = Question & {
   totalInSection: number
 }
 
-const flow: QuestionWithSection[] = questionSections.flatMap((section) =>
+const flow: QuestionWithSection[] = (questionData.sections as QuestionSection[]).flatMap((section) =>
   section.questions.map((question, index) => ({
     ...question,
     sectionId: section.id,
@@ -51,6 +43,18 @@ const flow: QuestionWithSection[] = questionSections.flatMap((section) =>
     totalInSection: section.questions.length,
   })),
 )
+
+const questionHeader = css`
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+`
+
+const wideHeader = css`
+  align-items: center;
+  justify-content: space-between;
+`
 
 const sectionMeta = css`
   display: flex;
@@ -66,82 +70,52 @@ const sectionProgressText = css`
   font-size: 14px;
 `
 
-const questionHeader = css`
+const answerMeta = css`
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  flex-wrap: wrap;
-`
-
-const wideHeader = css`
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  color: #475569;
+  font-size: 14px;
 `
 
-function evaluateAnswer(question: Question, answer: string): AnswerResult {
-  if (!answer.trim()) {
-    return { status: 'incorrect', message: '답변을 입력하거나 선택해 주세요.' }
-  }
+const answeredDot = css`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2563eb;
+`
 
-  if (question.type === 'single') {
-    return answer === question.correctAnswer
-      ? { status: 'correct', message: '합의한 방식과 일치합니다.' }
-      : {
-          status: 'incorrect',
-          message: '다시 이야기해 보세요. 서로의 상황에 맞는 선택인지 점검하세요.',
-        }
-  }
-
-  const normalizedAnswer = answer.toLowerCase()
-  const matchedKeywords = question.keywords.filter((keyword) =>
-    normalizedAnswer.includes(keyword.toLowerCase()),
-  )
-
-  if (matchedKeywords.length === question.keywords.length) {
-    return { status: 'correct', message: '핵심 요소를 모두 담았습니다.' }
-  }
-
-  if (matchedKeywords.length > 0) {
-    return {
-      status: 'partial',
-      message: `좋아요. "${question.keywords
-        .filter((keyword) => !matchedKeywords.includes(keyword))
-        .join(', ')}"에 대한 합의도 추가해 주세요.`,
-    }
-  }
-
-  return {
-    status: 'incorrect',
-    message: '조율 기준과 분담 방식이 보이지 않아요. 조금 더 구체적으로 작성해 주세요.',
-  }
-}
+const pendingDot = css`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e2e8f0;
+`
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [results, setResults] = useState<Record<string, AnswerResult>>({})
 
-  const completedCount = useMemo(
-    () => flow.filter((question) => results[question.id]?.status === 'correct').length,
-    [results],
+  const answeredCount = useMemo(
+    () => flow.filter((question) => (answers[question.id]?.trim() ?? '').length > 0).length,
+    [answers],
   )
 
   const currentQuestion = flow[currentIndex]
   const isLastQuestion = currentIndex === flow.length - 1
+  const currentSectionAnswered = useMemo(
+    () =>
+      flow.filter(
+        (question) =>
+          question.sectionId === currentQuestion.sectionId &&
+          (answers[question.id]?.trim() ?? '').length > 0,
+      ).length,
+    [answers, currentQuestion.sectionId],
+  )
 
   const handleAnswerChange = (id: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [id]: value }))
-    setResults((prev) => {
-      const next = { ...prev }
-      delete next[id]
-      return next
-    })
-  }
-
-  const handleCheckAnswer = () => {
-    if (!currentQuestion) return
-    const result = evaluateAnswer(currentQuestion, answers[currentQuestion.id] ?? '')
-    setResults((prev) => ({ ...prev, [currentQuestion.id]: result }))
   }
 
   const handleNext = () => {
@@ -153,15 +127,13 @@ function App() {
     setCurrentIndex((prev) => Math.max(prev - 1, 0))
   }
 
-  const handleReset = () => {
-    setAnswers({})
-    setResults({})
+  const handleBackToStart = () => {
     setCurrentIndex(0)
   }
 
-  const sectionProgress = `${currentQuestion.orderInSection}/${currentQuestion.totalInSection}`
+  const sectionProgress = `${currentSectionAnswered}/${currentQuestion.totalInSection}`
   const questionProgress = `${currentIndex + 1}/${flow.length}`
-  const hasResult = Boolean(results[currentQuestion.id])
+  const hasAnswer = (answers[currentQuestion.id]?.trim() ?? '').length > 0
 
   return (
     <>
@@ -214,38 +186,29 @@ function App() {
               />
             </TextAnswer>
           )}
-
-          {results[currentQuestion.id] && (
-            <Feedback status={results[currentQuestion.id].status}>
-              <FeedbackStatus>
-                {results[currentQuestion.id].status === 'correct'
-                  ? '정답'
-                  : results[currentQuestion.id].status === 'partial'
-                    ? '보완 필요'
-                    : '확인 필요'}
-              </FeedbackStatus>
-              <span>{results[currentQuestion.id].message}</span>
-            </Feedback>
-          )}
+          <div className={answerMeta}>
+            <span className={hasAnswer ? answeredDot : pendingDot} aria-hidden />
+            {hasAnswer ? '답변이 저장되었습니다.' : '답변을 입력해 주세요.'}
+          </div>
         </Card>
 
         <Actions>
           <Button variant="secondary" type="button" onClick={handlePrev} disabled={currentIndex === 0}>
             이전 질문
           </Button>
-          <Button variant="primary" type="button" onClick={handleCheckAnswer}>
-            정답 체크
+          <Button variant="primary" type="button" onClick={handleNext} disabled={isLastQuestion}>
+            {isLastQuestion ? '마지막 질문' : '다음 질문으로'}
           </Button>
-          <Button variant="primary" type="button" onClick={handleNext} disabled={!hasResult || isLastQuestion}>
-            {isLastQuestion ? '마지막 질문' : '다음 질문'}
-          </Button>
-          <Button variant="secondary" type="button" onClick={handleReset}>
-            전체 리셋
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={handleBackToStart}
+            disabled={currentIndex === 0}
+          >
+            처음 질문으로
           </Button>
         </Actions>
-        <Subtitle>
-          정답 확인 완료: {completedCount}/{flow.length}
-        </Subtitle>
+        <Subtitle>응답 완료: {answeredCount}/{flow.length}</Subtitle>
       </Page>
     </>
   );
