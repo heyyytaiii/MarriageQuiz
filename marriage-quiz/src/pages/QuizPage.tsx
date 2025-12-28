@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Actions,
   Badge,
@@ -108,11 +109,8 @@ const pendingDot = cx(
 function QuizPage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string>>({})
-  const { markParticipated } = useParticipationStatus()
-
-  useEffect(() => {
-    markParticipated()
-  }, [markParticipated])
+  const { hasParticipated, markParticipated, resetParticipation } = useParticipationStatus()
+  const navigate = useNavigate()
 
   const answeredCount = useMemo(
     () => flow.filter((question) => (answers[question.id]?.trim() ?? '').length > 0).length,
@@ -136,6 +134,7 @@ function QuizPage() {
   }
 
   const handleNext = () => {
+    if (!hasAnswer) return
     if (isLastQuestion) return
     setCurrentIndex((prev) => Math.min(prev + 1, flow.length - 1))
   }
@@ -151,8 +150,49 @@ function QuizPage() {
   const sectionProgress = `${currentSectionAnswered}/${currentQuestion.totalInSection}`
   const questionProgress = `${currentIndex + 1}/${flow.length}`
   const hasAnswer = (answers[currentQuestion.id]?.trim() ?? '').length > 0
+  const isComplete = answeredCount === flow.length && flow.length > 0
+
+  useEffect(() => {
+    if (!hasParticipated && isComplete) {
+      markParticipated()
+    }
+  }, [hasParticipated, isComplete, markParticipated])
+
+  const handleRetake = () => {
+    resetParticipation()
+    setAnswers({})
+    setCurrentIndex(0)
+  }
 
   const questionTypeLabel = currentQuestion.type === 'choice' ? '객관식' : '서술형'
+
+  if (hasParticipated) {
+    return (
+      <Page>
+        <PageHeader>
+          <div>
+            <Eyebrow>Marriage Quiz · 안내</Eyebrow>
+            <Title>이미 참여하셨습니다</Title>
+            <Subtitle>응시 기록을 초기화하고 재응시하거나 소개 페이지로 돌아가세요.</Subtitle>
+          </div>
+        </PageHeader>
+        <Card>
+          <CardTitle>재응시하기</CardTitle>
+          <Description>
+            이전 응시 기록을 지우고 처음부터 다시 진행합니다. 초기화 후에는 바로 첫 질문으로 이동합니다.
+          </Description>
+          <Actions>
+            <Button variant="primary" type="button" onClick={handleRetake}>
+              재응시하기
+            </Button>
+            <Button variant="secondary" type="button" onClick={() => navigate('/')}>
+              소개 페이지로
+            </Button>
+          </Actions>
+        </Card>
+      </Page>
+    )
+  }
 
   return (
     <Page>
@@ -212,7 +252,7 @@ function QuizPage() {
         <Button variant="secondary" type="button" onClick={handlePrev} disabled={currentIndex === 0}>
           이전 질문
         </Button>
-        <Button variant="primary" type="button" onClick={handleNext} disabled={isLastQuestion}>
+        <Button variant="primary" type="button" onClick={handleNext} disabled={!hasAnswer || isLastQuestion}>
           {isLastQuestion ? '마지막 질문' : '다음 질문으로'}
         </Button>
         <Button

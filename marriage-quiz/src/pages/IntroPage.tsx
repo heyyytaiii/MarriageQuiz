@@ -55,10 +55,14 @@ const badgeRow = css`
 
 function IntroPage() {
   const navigate = useNavigate()
-  const { hasParticipated, markParticipated } = useParticipationStatus()
+  const { hasParticipated, resetParticipation } = useParticipationStatus()
 
   const handleStart = () => {
-    markParticipated()
+    navigate('/quiz')
+  }
+
+  const handleRetake = () => {
+    resetParticipation()
     navigate('/quiz')
   }
 
@@ -73,12 +77,14 @@ function IntroPage() {
             질문을 풀고, 중요한 이야기를 정리해 보세요.
           </Subtitle>
           <div className={heroActions}>
-            <Button variant="primary" type="button" onClick={handleStart}>
+            <Button variant="primary" type="button" onClick={handleStart} disabled={hasParticipated}>
               응시하기
             </Button>
-            <Button variant="secondary" type="button" onClick={() => navigate('/quiz')}>
-              질문 미리보기
-            </Button>
+            {hasParticipated && (
+              <Button variant="secondary" type="button" onClick={handleRetake}>
+                재응시하기
+              </Button>
+            )}
           </div>
           <div className={badgeRow}>
             {hasParticipated && (
@@ -112,7 +118,7 @@ function IntroPage() {
             <li>필요하면 다시 돌아와 답변을 수정할 수 있습니다.</li>
           </ul>
           <p className={helperText}>
-            이미 참여한 경우에도 다시 응시하기를 눌러 이전 답변을 확인하며 이어갈 수 있습니다.
+            이미 참여한 경우 재응시하기로 상태를 초기화한 뒤 다시 시작할 수 있습니다.
           </p>
         </Card>
       </Grid>

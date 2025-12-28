@@ -2,12 +2,8 @@ import { useCallback, useState } from 'react'
 
 const PARTICIPATION_STORAGE_KEY = 'marriage-quiz-participated'
 
-const readParticipation = () => {
-  if (typeof window === 'undefined') {
-    return false
-  }
-  return window.localStorage.getItem(PARTICIPATION_STORAGE_KEY) === 'true'
-}
+const readParticipation = () =>
+  typeof window !== 'undefined' && window.localStorage.getItem(PARTICIPATION_STORAGE_KEY) === 'true'
 
 export const useParticipationStatus = () => {
   const [hasParticipated, setHasParticipated] = useState<boolean>(() => readParticipation())
@@ -19,5 +15,12 @@ export const useParticipationStatus = () => {
     }
   }, [])
 
-  return { hasParticipated, markParticipated }
+  const resetParticipation = useCallback(() => {
+    setHasParticipated(false)
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(PARTICIPATION_STORAGE_KEY)
+    }
+  }, [])
+
+  return { hasParticipated, markParticipated, resetParticipation }
 }
