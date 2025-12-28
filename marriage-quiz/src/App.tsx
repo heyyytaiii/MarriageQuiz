@@ -1,3 +1,4 @@
+
 import { useMemo, useState } from 'react'
 import {
   Actions,
@@ -247,7 +248,7 @@ function App() {
         </Subtitle>
       </Page>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
