@@ -86,7 +86,10 @@
       { "label": "300만원 이하", "value": "under_3m" },
       { "label": "300~700만원", "value": "3m_to_7m" },
       { "label": "700~1500만원", "value": "7m_to_15m" },
-      { "label": "경험이 중요(금액은 상황에 맞춰)", "value": "experience_first" }
+      {
+        "label": "경험이 중요(금액은 상황에 맞춰)",
+        "value": "experience_first"
+      }
     ]
   },
   {
