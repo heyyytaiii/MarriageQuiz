@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useFunnel } from '@use-funnel/react-router-dom'
 import {
   Actions,
   Badge,
@@ -106,51 +107,111 @@ const pendingDot = cx(
   `,
 )
 
+const toast = css`
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+  font-weight: 700;
+  font-size: 14px;
+`
+
 function QuizPage() {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [flowState] = useState(flow)
   const [answers, setAnswers] = useState<Record<number, string>>({})
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const toastTimerRef = useRef<number | null>(null)
   const { hasParticipated, markParticipated, resetParticipation } = useParticipationStatus()
   const navigate = useNavigate()
-
-  const answeredCount = useMemo(
-    () => flow.filter((question) => (answers[question.id]?.trim() ?? '').length > 0).length,
-    [answers],
+  const questionSteps = useMemo(
+    () => flowState.map((question) => String(question.id)),
+    [flowState],
   )
 
-  const currentQuestion = flow[currentIndex]
-  const isLastQuestion = currentIndex === flow.length - 1
+  const stepContexts = useMemo(
+    () =>
+      flowState.reduce<Record<string, { questionId: number }>>((acc, question) => {
+        acc[String(question.id)] = { questionId: question.id }
+        return acc
+      }, {}),
+    [flowState],
+  )
+
+  const funnel = useFunnel<Record<string, { questionId: number }>>({
+    id: 'quiz-flow',
+    steps: stepContexts,
+    initial: {
+      step: questionSteps[0],
+      context: stepContexts[questionSteps[0]],
+    },
+  })
+
+  const answeredCount = useMemo(
+    () => flowState.filter((question) => (answers[question.id]?.trim() ?? '').length > 0).length,
+    [answers, flowState],
+  )
+
+  const currentQuestion =
+    flowState.find((question) => String(question.id) === funnel.step) ?? flowState[0]
+  const currentIndex = useMemo(
+    () => flowState.findIndex((question) => String(question.id) === funnel.step),
+    [funnel.step, flowState],
+  )
   const currentSectionAnswered = useMemo(
     () =>
-      flow.filter(
+      flowState.filter(
         (question) =>
           question.sectionId === currentQuestion.sectionId &&
           (answers[question.id]?.trim() ?? '').length > 0,
       ).length,
-    [answers, currentQuestion.sectionId],
+    [answers, currentQuestion.sectionId, flowState],
   )
 
   const handleAnswerChange = (id: number, value: string) => {
     setAnswers((prev) => ({ ...prev, [id]: value }))
   }
 
+  const showToast = (message: string) => {
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current)
+    }
+    setToastMessage(message)
+    toastTimerRef.current = window.setTimeout(() => setToastMessage(null), 2200)
+  }
+
   const handleNext = () => {
-    if (!hasAnswer) return
+    if (!hasAnswer) {
+      showToast('답변을 입력해야 다음으로 이동할 수 있어요.')
+      return
+    }
     if (isLastQuestion) return
-    setCurrentIndex((prev) => Math.min(prev + 1, flow.length - 1))
+    const nextQuestion = flowState[currentIndex + 1]
+    funnel.history.push(String(nextQuestion.id), { questionId: nextQuestion.id })
   }
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0))
+    if (isFirst) return
+    const previousQuestion = flowState[currentIndex - 1]
+    funnel.history.push(String(previousQuestion.id), { questionId: previousQuestion.id })
   }
 
   const handleBackToStart = () => {
-    setCurrentIndex(0)
+    if (!questionSteps[0]) return
+    funnel.history.push(questionSteps[0], stepContexts[questionSteps[0]])
   }
 
-  const sectionProgress = `${currentSectionAnswered}/${currentQuestion.totalInSection}`
-  const questionProgress = `${currentIndex + 1}/${flow.length}`
-  const hasAnswer = (answers[currentQuestion.id]?.trim() ?? '').length > 0
-  const isComplete = answeredCount === flow.length && flow.length > 0
+  const sectionProgress = `${currentSectionAnswered}/${currentQuestion?.totalInSection ?? 0}`
+  const questionProgress = `${(currentIndex >= 0 ? currentIndex : 0) + 1}/${flowState.length}`
+  const hasAnswer = currentQuestion
+    ? (answers[currentQuestion.id]?.trim() ?? '').length > 0
+    : false
+  const isComplete = answeredCount === flowState.length && flowState.length > 0
+  const isFirst = currentIndex <= 0
+  const isLastQuestion = currentIndex === flowState.length - 1
 
   useEffect(() => {
     if (!hasParticipated && isComplete) {
@@ -158,13 +219,21 @@ function QuizPage() {
     }
   }, [hasParticipated, isComplete, markParticipated])
 
+  useEffect(
+    () => () => {
+      if (toastTimerRef.current) {
+        window.clearTimeout(toastTimerRef.current)
+      }
+    },
+    [],
+  )
+
   const handleRetake = () => {
     resetParticipation()
     setAnswers({})
-    setCurrentIndex(0)
+    if (!questionSteps[0]) return
+    funnel.history.push(questionSteps[0], stepContexts[questionSteps[0]])
   }
-
-  const questionTypeLabel = currentQuestion.type === 'choice' ? '객관식' : '서술형'
 
   if (hasParticipated) {
     return (
@@ -209,47 +278,49 @@ function QuizPage() {
         </div>
       </PageHeader>
 
-      <Card>
-        <div className={questionHeader}>
-          <Badge>{questionTypeLabel}</Badge>
-          <div>
-            <CardTitle>{currentQuestion.question}</CardTitle>
-            <Description>카테고리 · {currentQuestion.category}</Description>
+      {currentQuestion && (
+        <Card>
+          <div className={questionHeader}>
+            <Badge>{currentQuestion.type === 'choice' ? '객관식' : '서술형'}</Badge>
+            <div>
+              <CardTitle>{currentQuestion.question}</CardTitle>
+              <Description>카테고리 · {currentQuestion.category}</Description>
+            </div>
           </div>
-        </div>
 
-        {currentQuestion.type === 'choice' && currentQuestion.options ? (
-          <OptionGroup>
-            {currentQuestion.options.map((option) => (
-              <Option key={option.value} selected={answers[currentQuestion.id] === option.value}>
-                <OptionRadio
-                  name={String(currentQuestion.id)}
-                  value={option.value}
-                  checked={answers[currentQuestion.id] === option.value}
-                  onChange={(event) => handleAnswerChange(currentQuestion.id, event.target.value)}
-                />
-                <OptionText>{option.label}</OptionText>
-              </Option>
-            ))}
-          </OptionGroup>
-        ) : (
-          <TextAnswer>
-            <StyledTextarea
-              value={answers[currentQuestion.id] ?? ''}
-              onChange={(event) => handleAnswerChange(currentQuestion.id, event.target.value)}
-              placeholder="생각을 자유롭게 적어주세요"
-              rows={4}
-            />
-          </TextAnswer>
-        )}
-        <div className={answerMeta}>
-          <span className={hasAnswer ? answeredDot : pendingDot} aria-hidden />
-          {hasAnswer ? '답변이 저장되었습니다.' : '답변을 입력해 주세요.'}
-        </div>
-      </Card>
+          {currentQuestion.type === 'choice' && currentQuestion.options ? (
+            <OptionGroup>
+              {currentQuestion.options.map((option) => (
+                <Option key={option.value} selected={answers[currentQuestion.id] === option.value}>
+                  <OptionRadio
+                    name={String(currentQuestion.id)}
+                    value={option.value}
+                    checked={answers[currentQuestion.id] === option.value}
+                    onChange={(event) => handleAnswerChange(currentQuestion.id, event.target.value)}
+                  />
+                  <OptionText>{option.label}</OptionText>
+                </Option>
+              ))}
+            </OptionGroup>
+          ) : (
+            <TextAnswer>
+              <StyledTextarea
+                value={answers[currentQuestion.id] ?? ''}
+                onChange={(event) => handleAnswerChange(currentQuestion.id, event.target.value)}
+                placeholder="생각을 자유롭게 적어주세요"
+                rows={4}
+              />
+            </TextAnswer>
+          )}
+          <div className={answerMeta}>
+            <span className={hasAnswer ? answeredDot : pendingDot} aria-hidden />
+            {hasAnswer ? '답변이 저장되었습니다.' : '답변을 입력해 주세요.'}
+          </div>
+        </Card>
+      )}
 
       <Actions>
-        <Button variant="secondary" type="button" onClick={handlePrev} disabled={currentIndex === 0}>
+        <Button variant="secondary" type="button" onClick={handlePrev} disabled={isFirst}>
           이전 질문
         </Button>
         <Button variant="primary" type="button" onClick={handleNext} disabled={!hasAnswer || isLastQuestion}>
@@ -259,7 +330,7 @@ function QuizPage() {
           variant="secondary"
           type="button"
           onClick={handleBackToStart}
-          disabled={currentIndex === 0}
+          disabled={isFirst}
         >
           처음 질문으로
         </Button>
@@ -267,6 +338,7 @@ function QuizPage() {
       <Subtitle>
         응답 완료: {answeredCount}/{flow.length}
       </Subtitle>
+      {toastMessage && <div className={toast}>{toastMessage}</div>}
     </Page>
   )
 }
