@@ -201,6 +201,7 @@ This avoids protected-branch issues and required checks.
 - Do not modify lockfiles unless required by dependency changes.
 - Do not disable CI checks.
 - Do not delete large chunks of code unless required.
+- Do not conflict with main branch when making PR.
 
 ---
 
