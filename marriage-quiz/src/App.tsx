@@ -211,7 +211,7 @@ function App() {
         <Subtitle>응답 완료: {answeredCount}/{flow.length}</Subtitle>
       </Page>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

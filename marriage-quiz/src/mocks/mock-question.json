@@ -1,46 +1,1050 @@
-{
-  "sections": [
-    {
-      "id": "marriage-prep",
-      "title": "결혼 준비",
-      "description": "거주, 예산, 일정 등 기본 준비 단계를 함께 점검합니다.",
-      "questions": [
-        {
-          "id": "living-space",
-          "type": "single",
-          "prompt": "결혼 초기에 어디에서 함께 지낼지 이미 합의했나요?",
-          "description": "거주 공간에 대한 기본 합의를 확인하고, 서로가 중요하게 생각하는 조건을 이야기해 보세요.",
-          "options": ["신혼집을 바로 구한다", "한쪽 부모님 댁에서 잠시 지낸다", "아직 정하지 않았다"]
-        },
-        {
-          "id": "budget-plan",
-          "type": "text",
-          "prompt": "결혼 예산과 지출 분담 계획을 어떻게 세울까요?",
-          "description": "예산 상한, 분담 비율, 비상 비용 등을 포함해 합의한 방식을 적어 보세요.",
-          "guidance": "예: 총 예산 상한, 70:30 분담, 예비비와 결제 담당자 지정"
-        }
-      ]
-    },
-    {
-      "id": "conflict-resolution",
-      "title": "갈등 해결",
-      "description": "재정 · 가족 일정 등 갈등 가능성이 있는 주제의 합의 방식을 정리합니다.",
-      "questions": [
-        {
-          "id": "finance-split",
-          "type": "single",
-          "prompt": "생활비를 어떻게 나눌지 가장 현실적인 방식은 무엇이라고 생각하나요?",
-          "description": "부부 재정은 협력의 영역입니다. 서로의 상황을 듣고, 부담이 되지 않는 방식인지 확인하세요.",
-          "options": ["월급 비율에 맞춰 분담", "똑같이 50:50", "한 사람이 관리하고 나머지가 이체"]
-        },
-        {
-          "id": "family-holiday",
-          "type": "text",
-          "prompt": "명절 방문 계획을 어떻게 조율할지 설명해 보세요.",
-          "description": "양가 방문 순서, 기간, 이동 방법 등 구체적인 조율 방식을 적어 보세요. 서로의 기대치를 맞추는 것이 핵심입니다.",
-          "guidance": "예: 첫 해는 양가 번갈아 방문, 이동 시간과 휴식 시간 확보, 교통비와 준비물 분담 방식 등"
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "결혼식의 성격은 무엇에 더 가깝다고 생각하나요?",
+    "options": [
+      { "label": "가족·친척 중심의 가족 행사", "value": "family_event" },
+      { "label": "가족도 중요하지만 우리 의미가 더 큼", "value": "balanced" },
+      { "label": "우리 둘의 행사(가족은 초대 손님)", "value": "couple_event" },
+      { "label": "결혼식 자체가 꼭 필요하진 않음", "value": "no_wedding" }
+    ]
+  },
+  {
+    "id": 2,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "결혼식 준비에서 '부모님 의견' 반영 수준은 어디까지가 적당하다고 보나요?",
+    "options": [
+      { "label": "부모님이 원하는 방향이 우선", "value": "parents_first" },
+      {
+        "label": "부모님 의견을 강하게 반영하되 최종은 우리",
+        "value": "strong_input"
+      },
+      { "label": "필요한 부분만 참고(결정은 우리)", "value": "light_input" },
+      { "label": "원칙적으로 부모님 개입은 최소", "value": "minimal_input" }
+    ]
+  },
+  {
+    "id": 3,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "결혼식에서 '절대 지키고 싶은 1가지(원칙)'는 무엇인가요? (예: 하객 수, 비용 상한, 장소, 사진/영상, 일정 등)"
+  },
+  {
+    "id": 4,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "신혼집 형태는 무엇이 가장 현실적/선호에 가깝나요?",
+    "options": [
+      { "label": "월세(유연성 우선)", "value": "rent" },
+      { "label": "전세(주거 안정 우선)", "value": "jeonse" },
+      { "label": "매매(자산화 우선)", "value": "buy" },
+      { "label": "상황 보고 결정(정해진 선호 없음)", "value": "depends" }
+    ]
+  },
+  {
+    "id": 5,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "신혼집 위치/조건을 정할 때 우선순위를 1~3위로 적어주세요. (예: 출퇴근, 가격, 부모 거리, 학군, 생활권, 치안, 집 컨디션 등)"
+  },
+  {
+    "id": 6,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "결혼 준비 비용(예식/신혼여행/가전가구 등) 분담 기준은 무엇이 공정하다고 보나요?",
+    "options": [
+      { "label": "무조건 반반", "value": "split_50_50" },
+      { "label": "수입 비율대로", "value": "by_income_ratio" },
+      { "label": "항목별로 나눠 부담(예: 예식/집/여행)", "value": "by_items" },
+      { "label": "부담 가능한 사람이 더 부담", "value": "ability_based" }
+    ]
+  },
+  {
+    "id": 7,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "혼인신고 시점은 언제가 가장 좋다고 생각하나요?",
+    "options": [
+      { "label": "결혼식 이전", "value": "before_wedding" },
+      { "label": "결혼식 당일/직후", "value": "right_after" },
+      { "label": "신혼집/생활 안정 후", "value": "after_settle" },
+      { "label": "상황(대출/보험/세금 등)에 맞춰", "value": "pragmatic" }
+    ]
+  },
+  {
+    "id": 8,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "혼인신고 시점을 정할 때 '가장 크게 고려하는 요소'는 무엇인가요? (예: 심리적 의미, 가족, 제도/대출, 회사 복지 등)"
+  },
+  {
+    "id": 9,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "신혼여행 예산 상한선(둘이 합쳐)이 어느 구간이 적당하다고 보나요?",
+    "options": [
+      { "label": "300만원 이하", "value": "under_3m" },
+      { "label": "300~700만원", "value": "3m_to_7m" },
+      { "label": "700~1500만원", "value": "7m_to_15m" },
+      {
+        "label": "경험이 중요(금액은 상황에 맞춰)",
+        "value": "experience_first"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "결혼 준비 중 갈등이 생겼을 때 최종 결론 방식은 무엇이 좋다고 보나요?",
+    "options": [
+      { "label": "끝까지 합의(시간이 걸려도)", "value": "consensus" },
+      { "label": "사안별 담당자(주도자)가 결정", "value": "owner_decides" },
+      { "label": "미리 정한 룰(예: 번갈아 결정)로", "value": "pre_rule" },
+      { "label": "제3자(플래너/상담/부모) 조언 반영", "value": "third_party" }
+    ]
+  },
+  {
+    "id": 11,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "결혼 준비 과정에서 '절대 하면 안 되는 행동/말'은 무엇이라고 생각하나요? (예: 비교, 무시, 잠수, 결정 강요 등)"
+  },
+  {
+    "id": 12,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "예단/예물/예복 같은 전통 요소는 어떤 입장인가요?",
+    "options": [
+      { "label": "필수(격식과 예의)", "value": "must_tradition" },
+      { "label": "가능하면 하되 간소화", "value": "simple_tradition" },
+      { "label": "상대 가족이 원하면 맞춘다", "value": "family_preference" },
+      { "label": "불필요(대신 다른 곳에 쓰자)", "value": "skip_tradition" }
+    ]
+  },
+  {
+    "id": 13,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "동거에 대한 생각은 무엇에 더 가깝나요?",
+    "options": [
+      { "label": "결혼 전 동거 찬성", "value": "cohabit_yes" },
+      {
+        "label": "조건부 찬성(기간/규칙 필요)",
+        "value": "cohabit_conditional"
+      },
+      { "label": "반대(결혼 후가 좋다)", "value": "cohabit_no" },
+      { "label": "상대가 원하면 맞춘다", "value": "cohabit_flexible" }
+    ]
+  },
+  {
+    "id": 14,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "동거를 한다면(혹은 한다고 가정하면) '규칙 3가지'를 정해본다면 무엇인가요? (예: 비용, 집안일, 개인시간, 연락, 취침, 방문객 등)"
+  },
+  {
+    "id": 15,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "양가 방문/명절 일정은 어떤 방식이 가장 공정하다고 보나요?",
+    "options": [
+      { "label": "각자 본가 우선(분리 방문)", "value": "separate_priority" },
+      { "label": "번갈아(올해 A, 내년 B)", "value": "alternate" },
+      { "label": "당일/시간을 나눠 양쪽 모두", "value": "split_time" },
+      { "label": "상황별 협의(거리/일정/건강)", "value": "situational" }
+    ]
+  },
+  {
+    "id": 16,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "신혼 초 '가전/가구' 구매 기준은 무엇이 더 중요한가요?",
+    "options": [
+      { "label": "가성비", "value": "value_for_money" },
+      { "label": "브랜드/품질", "value": "quality" },
+      { "label": "디자인/인테리어 통일감", "value": "design" },
+      { "label": "필요한 것만 최소로", "value": "minimal" }
+    ]
+  },
+  {
+    "id": 17,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "결혼 준비에서 '돈을 더 써도 좋다'고 생각하는 항목과 '절대 줄이고 싶은' 항목을 각각 1개씩 적어주세요."
+  },
+  {
+    "id": 18,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "부부가 될 때 '가족(양가)'과의 경계는 어떻게 설정하는 게 좋다고 보나요?",
+    "options": [
+      { "label": "가족도 우리 관계의 중심", "value": "family_center" },
+      { "label": "중요하지만 1순위는 부부", "value": "couple_first" },
+      { "label": "가족과는 거리를 두는 게 안정적", "value": "distance" },
+      { "label": "정해두기 어렵고 상황마다", "value": "depends" }
+    ]
+  },
+  {
+    "id": 19,
+    "category": "결혼준비",
+    "type": "choice",
+    "question": "결혼 후 성(姓)·호칭·예절 등 문화적 규범은 어떻게 맞추고 싶나요?",
+    "options": [
+      { "label": "전통을 최대한 따른다", "value": "traditional" },
+      { "label": "핵심만 따르고 나머지는 유연", "value": "semi_traditional" },
+      { "label": "우리 방식으로 새로 정한다", "value": "custom" },
+      { "label": "서로 불편하지 않게 최소화", "value": "minimize_norms" }
+    ]
+  },
+  {
+    "id": 20,
+    "category": "결혼준비",
+    "type": "essay",
+    "question": "결혼을 결심하게 만든 '결정적 이유 1가지'와 결혼 후에도 유지하고 싶은 '우리만의 의식(루틴) 1가지'를 적어주세요."
+  },
+
+  {
+    "id": 21,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등이 생겼을 때 본인의 기본 반응은 무엇에 더 가깝나요?",
+    "options": [
+      { "label": "바로 말해서 해결하려 한다", "value": "immediate_talk" },
+      { "label": "시간을 두고 정리 후 말한다", "value": "cool_then_talk" },
+      { "label": "웬만하면 넘어간다(회피)", "value": "avoid" },
+      { "label": "상대가 먼저 말하길 기다린다", "value": "wait" }
+    ]
+  },
+  {
+    "id": 22,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "싸움 중 '연락을 끊는 행동(잠수)'에 대해 어떻게 생각하나요?",
+    "options": [
+      { "label": "절대 안 된다", "value": "never" },
+      { "label": "짧게(1~2시간)면 필요할 수 있다", "value": "short_ok" },
+      { "label": "하루 정도는 괜찮다", "value": "one_day_ok" },
+      { "label": "며칠도 이해 가능하다", "value": "days_ok" }
+    ]
+  },
+  {
+    "id": 23,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "갈등 상황에서 상대가 '이렇게만 해주면 좋겠다'고 느끼는 행동 2가지를 적어주세요. (예: 들어주기, 요약하기, 사과 방식 등)"
+  },
+  {
+    "id": 24,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등의 주제가 '돈/가족/육아/집안일'처럼 민감할 때, 어떤 방식이 더 효과적이라고 보나요?",
+    "options": [
+      { "label": "그 자리에서 바로 정리한다", "value": "resolve_now" },
+      { "label": "시간을 잡아 회의처럼 한다", "value": "scheduled_talk" },
+      {
+        "label": "문서/메모로 정리하고 이야기한다",
+        "value": "write_then_talk"
+      },
+      { "label": "상담/코칭 같은 외부 도움을 받는다", "value": "external_help" }
+    ]
+  },
+  {
+    "id": 25,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "싸움이 커지기 직전, 본인에게 나타나는 '신호(행동/말/표정)'는 무엇인가요? 그때 필요한 대처는 무엇인가요?"
+  },
+  {
+    "id": 26,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "사과의 타이밍은 언제가 가장 진정성 있다고 느끼나요?",
+    "options": [
+      { "label": "즉시 사과", "value": "immediate_apology" },
+      { "label": "감정이 가라앉은 후 사과", "value": "after_cool" },
+      {
+        "label": "상황을 충분히 설명한 뒤 사과",
+        "value": "explain_then_apology"
+      },
+      {
+        "label": "행동으로 먼저 보여준 뒤 사과",
+        "value": "action_then_apology"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등 중 '목소리 높임/비꼼/무시' 같은 표현에 대한 기준은 무엇인가요?",
+    "options": [
+      { "label": "절대 금지(한 번도 안 됨)", "value": "zero_tolerance" },
+      {
+        "label": "가끔은 나올 수 있으나 사과/회복이 필수",
+        "value": "recover_required"
+      },
+      { "label": "감정이 격하면 어느 정도는 이해", "value": "understandable" },
+      {
+        "label": "표현 방식은 개인차라 크게 문제 아님",
+        "value": "not_big_deal"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "상대가 사과했을 때 '용서/회복'이 된다고 느끼는 조건은 무엇인가요? (말/행동/시간/재발 방지 등)"
+  },
+  {
+    "id": 29,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등이 반복될 때, 무엇을 먼저 해야 한다고 생각하나요?",
+    "options": [
+      { "label": "원인 분석(패턴 찾기)부터", "value": "analyze_pattern" },
+      { "label": "규칙 만들기(예: 금지어/타임아웃)", "value": "set_rules" },
+      { "label": "역할/책임 재조정(집안일/돈/시간)", "value": "adjust_roles" },
+      { "label": "외부 도움(상담/코칭/멘토)", "value": "seek_help" }
+    ]
+  },
+  {
+    "id": 30,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등 중 '과거 일'을 다시 꺼내는 것에 대한 생각은 무엇인가요?",
+    "options": [
+      { "label": "절대 꺼내면 안 된다", "value": "never_bring_past" },
+      { "label": "현재 문제 해결에 필요하면 가능", "value": "if_relevant" },
+      { "label": "반복되는 문제라면 재검토 필요", "value": "pattern_review" },
+      { "label": "때로는 감정 정리를 위해 필요", "value": "emotional_process" }
+    ]
+  },
+  {
+    "id": 31,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "두 사람 사이에 '싸움 규칙(룰) 5가지'를 만든다면 무엇인가요? (예: 욕/비하 금지, 잠수 제한, 타임아웃 등)"
+  },
+  {
+    "id": 32,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등을 제3자(부모/친구)에게 공유하는 것에 대한 기준은 무엇인가요?",
+    "options": [
+      { "label": "원칙적으로 공유하지 않는다", "value": "no_share" },
+      { "label": "심각할 때만 제한적으로", "value": "limited_share" },
+      { "label": "가까운 사람 1명에게는 가능", "value": "trusted_one" },
+      { "label": "도움이 된다면 공유해도 된다", "value": "open_share" }
+    ]
+  },
+  {
+    "id": 33,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등 해결에서 '누가 먼저' 다가가야 한다고 생각하나요?",
+    "options": [
+      { "label": "더 잘못한 사람이 먼저", "value": "fault_first" },
+      { "label": "먼저 알아차린 사람이 먼저", "value": "aware_first" },
+      { "label": "상대가 힘들어 보이면 내가 먼저", "value": "care_first" },
+      { "label": "정해두기 어렵고 상황마다", "value": "depends" }
+    ]
+  },
+  {
+    "id": 34,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "갈등이 생겼을 때 '나에게 특히 금지'해야 할 행동(본인 습관 1가지)과, 대신 할 대체 행동 1가지를 적어주세요."
+  },
+  {
+    "id": 35,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "상대가 힘들어할 때, 내가 해야 하는 1순위는 무엇이라고 보나요?",
+    "options": [
+      { "label": "공감(감정 수용)", "value": "empathy" },
+      { "label": "해결책 제시", "value": "solutions" },
+      { "label": "공간/시간 제공", "value": "space" },
+      { "label": "기분 전환(함께 활동)", "value": "distraction" }
+    ]
+  },
+  {
+    "id": 36,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "다툰 뒤 '화해'를 확인하는 방식은 무엇이 가장 필요하나요?",
+    "options": [
+      { "label": "대화로 정리(합의/정리)", "value": "talk_and_close" },
+      { "label": "스킨십/애정 표현", "value": "affection" },
+      { "label": "사과 + 재발 방지 약속", "value": "promise_prevent" },
+      { "label": "시간이 해결(자연 회복)", "value": "time_heals" }
+    ]
+  },
+  {
+    "id": 37,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "부부상담/커플코칭에 대해 어떤 입장인가요? '어떤 조건이면' 받는 것을 고려할 수 있는지도 적어주세요."
+  },
+  {
+    "id": 38,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등 시 대화의 '형식'은 무엇이 더 잘 맞나요?",
+    "options": [
+      { "label": "즉흥 대화(바로 말하기)", "value": "spontaneous" },
+      { "label": "약속 잡고 대화", "value": "scheduled" },
+      { "label": "메모/메신저로 먼저 정리 후 대화", "value": "written_first" },
+      { "label": "상대 방식에 맞춰준다", "value": "adapt" }
+    ]
+  },
+  {
+    "id": 39,
+    "category": "갈등해결",
+    "type": "choice",
+    "question": "갈등에서 가장 위험하다고 생각하는 요소는 무엇인가요?",
+    "options": [
+      { "label": "무시/냉담(정서적 단절)", "value": "stonewalling" },
+      { "label": "비난/인신공격", "value": "attack" },
+      { "label": "방어/책임 회피", "value": "defensiveness" },
+      { "label": "경멸/조롱", "value": "contempt" }
+    ]
+  },
+  {
+    "id": 40,
+    "category": "갈등해결",
+    "type": "essay",
+    "question": "갈등이 있어도 이 관계를 유지하고 싶은 이유를 '한 문장'으로 적어주세요. (힘들 때 꺼내볼 문장)"
+  },
+
+  {
+    "id": 41,
+    "category": "육아",
+    "type": "choice",
+    "question": "자녀 계획에 대한 생각은 무엇에 가장 가깝나요?",
+    "options": [
+      { "label": "반드시 아이를 갖고 싶다", "value": "must" },
+      { "label": "가능하면 갖고 싶다", "value": "prefer" },
+      { "label": "상황에 따라 다르다", "value": "depends" },
+      { "label": "아이 없이도 충분히 가능하다", "value": "no_child" }
+    ]
+  },
+  {
+    "id": 42,
+    "category": "육아",
+    "type": "choice",
+    "question": "자녀가 생긴다면, 양육의 우선 가치는 무엇인가요?",
+    "options": [
+      { "label": "행복/정서 안정", "value": "happiness" },
+      { "label": "성취/학업", "value": "achievement" },
+      { "label": "인성/예의", "value": "character" },
+      { "label": "자율/독립", "value": "autonomy" }
+    ]
+  },
+  {
+    "id": 43,
+    "category": "육아",
+    "type": "essay",
+    "question": "아이를 키운다면 '절대 하지 않겠다'고 생각하는 양육 방식 1가지와 그 이유를 적어주세요."
+  },
+  {
+    "id": 44,
+    "category": "육아",
+    "type": "choice",
+    "question": "자녀 수에 대한 선호는 무엇인가요?",
+    "options": [
+      { "label": "1명", "value": "one" },
+      { "label": "2명", "value": "two" },
+      { "label": "3명 이상", "value": "three_plus" },
+      { "label": "정해두지 않음(상황에 따라)", "value": "not_sure" }
+    ]
+  },
+  {
+    "id": 45,
+    "category": "육아",
+    "type": "essay",
+    "question": "육아에서 가장 두려운 점(불안)은 무엇인가요? 그 불안을 줄이기 위해 배우자에게 기대하는 지원은 무엇인가요?"
+  },
+  {
+    "id": 46,
+    "category": "육아",
+    "type": "choice",
+    "question": "맞벌이 상황에서 육아/돌봄의 기본 구조는 어떻게 가는 게 좋다고 보나요?",
+    "options": [
+      { "label": "둘이 최대한 직접(돌봄 최소화)", "value": "direct_care" },
+      { "label": "어린이집/기관 중심", "value": "institution" },
+      { "label": "조부모 도움 비중 큼", "value": "grandparents" },
+      { "label": "도우미/베이비시터 적극 활용", "value": "helper" }
+    ]
+  },
+  {
+    "id": 47,
+    "category": "육아",
+    "type": "choice",
+    "question": "체벌/강한 훈육에 대한 입장은 무엇인가요?",
+    "options": [
+      { "label": "체벌은 절대 반대", "value": "no_physical" },
+      { "label": "체벌은 반대지만 단호한 규칙은 필요", "value": "firm_rules" },
+      { "label": "아주 예외적으로는 가능", "value": "rare_ok" },
+      { "label": "상황에 따라 다르다", "value": "depends" }
+    ]
+  },
+  {
+    "id": 48,
+    "category": "육아",
+    "type": "essay",
+    "question": "자녀 교육에서 '우리가 꼭 합의해야 하는 규칙 3가지'를 적어주세요. (예: 스마트폰, 공부, 예절, 게임, 외출, 친구 등)"
+  },
+  {
+    "id": 49,
+    "category": "육아",
+    "type": "choice",
+    "question": "사교육에 대한 기본 입장은 무엇인가요?",
+    "options": [
+      { "label": "가능한 최소(자연/놀이 중심)", "value": "minimize" },
+      { "label": "필요한 과목만(조건부)", "value": "selective" },
+      { "label": "경쟁력 위해 적극", "value": "aggressive" },
+      { "label": "아이 성향에 따라", "value": "child_based" }
+    ]
+  },
+  {
+    "id": 50,
+    "category": "육아",
+    "type": "choice",
+    "question": "아이의 진로/전공 선택에서 부모의 개입 수준은 어느 정도가 적당하다고 보나요?",
+    "options": [
+      { "label": "부모가 방향을 제시해야 한다", "value": "parents_direct" },
+      { "label": "부모가 정보/현실 조언은 강하게", "value": "strong_advice" },
+      { "label": "정보 제공만 하고 결정은 아이", "value": "info_only" },
+      { "label": "아이에게 전적으로 맡긴다", "value": "child_decides" }
+    ]
+  },
+  {
+    "id": 51,
+    "category": "육아",
+    "type": "essay",
+    "question": "조부모가 육아에 참여한다면 어디까지 허용/요청하고 싶나요? (예: 하원 픽업, 주말 돌봄, 장기 동거, 교육 개입 등)"
+  },
+  {
+    "id": 52,
+    "category": "육아",
+    "type": "choice",
+    "question": "육아로 인해 커리어 조정이 필요할 때, 기본 원칙은 무엇이 맞다고 보나요?",
+    "options": [
+      { "label": "수입이 낮은 쪽이 조정", "value": "lower_income_adjust" },
+      {
+        "label": "커리어 성장 가능성이 낮은 쪽이 조정",
+        "value": "lower_growth_adjust"
+      },
+      { "label": "둘 다 일부씩 조정(공동 부담)", "value": "both_adjust" },
+      { "label": "외부 돌봄을 써서 커리어는 유지", "value": "keep_career" }
+    ]
+  },
+  {
+    "id": 53,
+    "category": "육아",
+    "type": "choice",
+    "question": "아이에게 스마트폰/개인 디바이스를 허용하는 시기는 어떻게 보는 편인가요?",
+    "options": [
+      { "label": "초등 저학년 이전은 불가", "value": "no_before_lower" },
+      { "label": "초등 고학년부터 제한적으로", "value": "limited_upper" },
+      { "label": "중학생 이후", "value": "after_middle" },
+      { "label": "시기보다 사용 규칙이 중요", "value": "rules_over_age" }
+    ]
+  },
+  {
+    "id": 54,
+    "category": "육아",
+    "type": "essay",
+    "question": "자녀가 기대와 다른 선택(예: 성적/진로/가치관)을 할 때, 부모로서 어떤 태도를 유지하고 싶나요?"
+  },
+  {
+    "id": 55,
+    "category": "육아",
+    "type": "choice",
+    "question": "아이 앞에서 부부 갈등을 드러내는 것에 대한 기준은 무엇인가요?",
+    "options": [
+      { "label": "절대 아이 앞에서는 금지", "value": "never_in_front" },
+      { "label": "감정 폭발은 금지, 차분한 대화는 가능", "value": "calm_ok" },
+      {
+        "label": "아이에게도 갈등 해결을 보여주는 게 교육",
+        "value": "model_resolution"
+      },
+      { "label": "상황에 따라 다르다", "value": "depends" }
+    ]
+  },
+  {
+    "id": 56,
+    "category": "육아",
+    "type": "choice",
+    "question": "부모 역할에서 '가장 중요한 것'은 무엇이라고 생각하나요?",
+    "options": [
+      { "label": "안정감(정서적 안전)", "value": "security" },
+      { "label": "규칙/일관성", "value": "consistency" },
+      { "label": "모범(행동으로 보여주기)", "value": "role_model" },
+      { "label": "지원(원하면 도와주기)", "value": "support" }
+    ]
+  },
+  {
+    "id": 57,
+    "category": "육아",
+    "type": "essay",
+    "question": "아이에게 꼭 물려주고 싶은 가치(인생 기준) 1~2가지는 무엇인가요? (예: 정직, 성실, 배려, 도전 등)"
+  },
+  {
+    "id": 58,
+    "category": "육아",
+    "type": "choice",
+    "question": "육아 스트레스 해소 방식으로 본인에게 가장 효과적인 것은 무엇인가요?",
+    "options": [
+      { "label": "혼자 쉬기(혼자 시간)", "value": "alone_time" },
+      { "label": "배우자와 대화/공감", "value": "talk" },
+      { "label": "운동/취미", "value": "hobby" },
+      { "label": "친구/가족과 교류", "value": "social" }
+    ]
+  },
+  {
+    "id": 59,
+    "category": "육아",
+    "type": "choice",
+    "question": "자녀가 생긴 뒤에도 '부부 시간'은 어느 수준으로 지켜야 한다고 보나요?",
+    "options": [
+      { "label": "우선순위 낮아져도 어쩔 수 없음", "value": "low_priority" },
+      { "label": "월 1~2회라도 반드시", "value": "monthly" },
+      { "label": "주 1회 이상은 지켜야 함", "value": "weekly" },
+      { "label": "상황에 맞춰 유동적", "value": "flexible" }
+    ]
+  },
+  {
+    "id": 60,
+    "category": "육아",
+    "type": "essay",
+    "question": "자녀가 성인이 되었을 때, 어떤 부모로 기억되고 싶나요? (키워드 3개 + 짧은 이유)"
+  },
+
+  {
+    "id": 61,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "결혼 후 돈 관리는 어떤 방식이 가장 이상적이라고 생각하나요?",
+    "options": [
+      { "label": "완전 공유(수입·지출 모두 통합)", "value": "full_share" },
+      { "label": "공용 자금 + 개인 자금 분리", "value": "mixed" },
+      { "label": "대부분 분리, 큰돈만 공유", "value": "mostly_separate" },
+      { "label": "완전 분리(각자 책임)", "value": "separate" }
+    ]
+  },
+  {
+    "id": 62,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "월 생활비(고정비 포함) 운영 방식은 무엇이 편한가요?",
+    "options": [
+      { "label": "공동 계좌에 매달 정액 입금", "value": "joint_fixed" },
+      { "label": "수입 비율대로 공동 계좌 입금", "value": "joint_ratio" },
+      { "label": "항목별로 나눠 각자 결제", "value": "split_by_category" },
+      { "label": "그때그때 정산(유연)", "value": "ad_hoc_settle" }
+    ]
+  },
+  {
+    "id": 63,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "돈 문제로 갈등이 생겼을 때, 부부로서 절대 지키고 싶은 원칙 1가지를 적어주세요. (예: 숨김 금지, 한도 합의, 빚 공유 등)"
+  },
+  {
+    "id": 64,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "대출(빚)에 대한 기본 태도는 무엇에 가깝나요?",
+    "options": [
+      { "label": "최대한 피한다(무차입 선호)", "value": "avoid_debt" },
+      { "label": "필요하면 감수(보수적으로)", "value": "conservative_use" },
+      { "label": "기회면 적극 활용(레버리지)", "value": "aggressive_use" },
+      { "label": "상황/금리에 따라 다름", "value": "rate_dependent" }
+    ]
+  },
+  {
+    "id": 65,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "배우자의 소비가 불안해지는 '경계선(금액/빈도/품목)'은 어디인가요? (구체적으로)"
+  },
+  {
+    "id": 66,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "투자(주식/코인/부동산 등)에서 본인의 성향은 무엇에 가깝나요?",
+    "options": [
+      { "label": "원금 보전 최우선(저위험)", "value": "low_risk" },
+      { "label": "중위험 중수익 선호", "value": "balanced" },
+      { "label": "고위험 고수익도 가능", "value": "high_risk" },
+      { "label": "투자는 거의 하지 않음", "value": "no_invest" }
+    ]
+  },
+  {
+    "id": 67,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "개인 용돈(자유 지출)은 어떤 방식이 좋나요?",
+    "options": [
+      { "label": "각자 고정 용돈(정액)", "value": "fixed_allowance" },
+      { "label": "수입 비율에 따라 용돈도 비율", "value": "ratio_allowance" },
+      {
+        "label": "용돈 개념 없이 자유(대신 큰돈만 합의)",
+        "value": "free_with_threshold"
+      },
+      { "label": "필요할 때 요청/협의", "value": "request_based" }
+    ]
+  },
+  {
+    "id": 68,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "큰 지출의 '합의 기준'을 정해봅시다. 얼마 이상이면 반드시 사전 합의가 필요하다고 생각하나요? (금액 + 예시)"
+  },
+  {
+    "id": 69,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "비상금(각자 숨겨둔 돈)에 대해 어떻게 생각하나요?",
+    "options": [
+      {
+        "label": "원칙적으로 비상금도 공유해야 함",
+        "value": "share_emergency"
+      },
+      {
+        "label": "각자 비상금은 허용(상호 인지)",
+        "value": "allowed_disclosed"
+      },
+      {
+        "label": "각자 비상금은 허용(서로 몰라도 됨)",
+        "value": "allowed_private"
+      },
+      { "label": "상황에 따라(신뢰/재정상태 따라)", "value": "depends" }
+    ]
+  },
+  {
+    "id": 70,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "보험(실손/정기/종신 등)에 대한 기본 입장은 무엇인가요?",
+    "options": [
+      { "label": "최소한만(필수 위주)", "value": "minimum" },
+      { "label": "가족 생기면 적극적으로", "value": "family_first" },
+      { "label": "보험보단 저축/투자가 낫다", "value": "prefer_invest" },
+      { "label": "잘 모르니 전문가/배우자 주도", "value": "delegate" }
+    ]
+  },
+  {
+    "id": 71,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "부모 지원/부양(용돈, 병원비, 생활비)이 발생한다면, 어디까지가 '부부가 함께 책임질 범위'라고 생각하나요?"
+  },
+  {
+    "id": 72,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "재무 현황(수입/지출/자산/부채)을 서로 공개하는 수준은 어느 정도가 좋나요?",
+    "options": [
+      {
+        "label": "전부 투명 공개(계좌/대출 포함)",
+        "value": "full_transparent"
+      },
+      { "label": "큰 틀만 공유(총액 중심)", "value": "high_level" },
+      { "label": "필요할 때만 공유", "value": "on_demand" },
+      { "label": "각자 관리하되 문제 생기면 공유", "value": "issue_based" }
+    ]
+  },
+  {
+    "id": 73,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "가계부/재무 점검 주기는 어느 정도가 현실적이라고 보나요?",
+    "options": [
+      { "label": "매주", "value": "weekly" },
+      { "label": "매월", "value": "monthly" },
+      { "label": "분기(3개월)마다", "value": "quarterly" },
+      { "label": "필요할 때만", "value": "as_needed" }
+    ]
+  },
+  {
+    "id": 74,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "‘우리 집 재무 목표’ 3가지를 적어주세요. (예: 비상금 6개월, 대출 상환, 투자 비율, 내집 마련, 여행 등)"
+  },
+  {
+    "id": 75,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "배우자의 투자/소비로 손실이 발생했을 때, 책임은 어떻게 보는 편인가요?",
+    "options": [
+      { "label": "공동 책임(부부는 한 팀)", "value": "joint_responsibility" },
+      {
+        "label": "합의한 건 공동, 합의 안 한 건 개인",
+        "value": "agreed_only_joint"
+      },
+      { "label": "원칙적으로 개인 책임", "value": "personal_responsibility" },
+      { "label": "상황/규모에 따라 협의", "value": "situational" }
+    ]
+  },
+  {
+    "id": 76,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "부부의 장기 자산 전략에서 더 선호하는 방향은 무엇인가요?",
+    "options": [
+      { "label": "안정(현금/예금/채권)", "value": "stability" },
+      { "label": "균형(현금+투자 혼합)", "value": "balanced" },
+      { "label": "성장(주식/부동산 비중)", "value": "growth" },
+      { "label": "아직 잘 모르겠다", "value": "not_sure" }
+    ]
+  },
+  {
+    "id": 77,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "수입이 크게 줄어드는 상황(실직/휴직)이 생기면, 생활 수준을 어떻게 조정하고 어떤 순서로 줄일 건가요?"
+  },
+  {
+    "id": 78,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "돈과 관련된 '비밀'은 어디까지 허용 가능한가요?",
+    "options": [
+      { "label": "어떤 것도 비밀이면 안 됨", "value": "no_secret" },
+      { "label": "소액 취미 지출 정도는 괜찮다", "value": "small_ok" },
+      { "label": "개인 자산/계좌는 비밀 가능", "value": "account_private_ok" },
+      { "label": "상대에게 해가 없다면 가능", "value": "harm_based" }
+    ]
+  },
+  {
+    "id": 79,
+    "category": "자산관리",
+    "type": "choice",
+    "question": "빚(학자금/신용/카드) 공개와 상환 방식에 대한 원칙은 무엇이 맞다고 보나요?",
+    "options": [
+      { "label": "결혼 전 빚은 각자 책임", "value": "pre_debt_personal" },
+      { "label": "결혼하면 함께 해결", "value": "solve_together" },
+      { "label": "합의한 부분만 함께", "value": "partial_together" },
+      { "label": "상황에 따라", "value": "depends" }
+    ]
+  },
+  {
+    "id": 80,
+    "category": "자산관리",
+    "type": "essay",
+    "question": "돈에 대해 내가 가장 불안해하는 포인트 1가지와, 그 불안을 줄이기 위한 '부부 합의안'을 한 줄로 적어주세요."
+  },
+
+  {
+    "id": 81,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "혼자만의 시간은 결혼 후에도 얼마나 필요하다고 느끼나요?",
+    "options": [
+      { "label": "거의 필요 없다", "value": "none" },
+      { "label": "가끔 있으면 좋다", "value": "sometimes" },
+      { "label": "정기적으로 꼭 필요하다", "value": "regular" },
+      { "label": "없으면 힘들다", "value": "essential" }
+    ]
+  },
+  {
+    "id": 82,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "연락 빈도(메시지/통화)에 대한 기본 기대치는 무엇에 가깝나요?",
+    "options": [
+      { "label": "필요할 때만", "value": "as_needed" },
+      { "label": "하루 1~2회 정도", "value": "once_or_twice" },
+      { "label": "중간중간 수시로", "value": "frequent" },
+      { "label": "정해두기 어렵고 상황마다", "value": "depends" }
+    ]
+  },
+  {
+    "id": 83,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "연락/응답이 늦을 때(예: 2~3시간 이상), 상대가 어떤 방식으로 설명/배려해주면 불안이 줄어드나요?"
+  },
+  {
+    "id": 84,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "집안일 분담 방식은 무엇이 가장 공정하다고 느끼나요?",
+    "options": [
+      { "label": "완전 반반(시간/항목까지)", "value": "equal_split" },
+      { "label": "시간 여유 있는 사람이 더", "value": "time_based" },
+      { "label": "역할 분담(요리/청소/세탁 등)", "value": "role_based" },
+      { "label": "외부 서비스(도우미/세탁) 적극 활용", "value": "outsourcing" }
+    ]
+  },
+  {
+    "id": 85,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "집안일에서 '내가 특히 예민한 기준 1가지'와 '상대에게 최소 요구하는 기준'을 구체적으로 적어주세요."
+  },
+  {
+    "id": 86,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "주말을 보내는 이상적인 방식은 무엇에 가깝나요?",
+    "options": [
+      { "label": "집에서 쉬기", "value": "rest_home" },
+      { "label": "외출/활동(카페/데이트/운동)", "value": "go_out" },
+      { "label": "친구/모임 위주", "value": "social" },
+      { "label": "상황에 따라", "value": "depends" }
+    ]
+  },
+  {
+    "id": 87,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "여행 스타일은 무엇에 더 가깝나요?",
+    "options": [
+      { "label": "휴양(쉼 위주)", "value": "relax" },
+      { "label": "관광(핵심 명소 위주)", "value": "sightseeing" },
+      { "label": "맛집/로컬 체험 위주", "value": "local_food" },
+      { "label": "계획 최소(즉흥)", "value": "spontaneous" }
+    ]
+  },
+  {
+    "id": 88,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "여행에서 갈등이 나기 쉬운 포인트(일정/돈/피로/식사 등) 중, 우리 커플이 미리 합의해야 할 규칙 2가지를 적어주세요."
+  },
+  {
+    "id": 89,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "친구/지인 모임(술자리 포함) 빈도는 어느 정도가 적당하다고 보나요?",
+    "options": [
+      { "label": "주 1회 이상도 괜찮다", "value": "weekly_or_more" },
+      { "label": "2주에 1회 정도", "value": "biweekly" },
+      { "label": "월 1회 정도", "value": "monthly" },
+      { "label": "자주보단 가끔", "value": "rare" }
+    ]
+  },
+  {
+    "id": 90,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "기념일(생일/연애기념/결혼기념일)을 챙기는 기준은 무엇인가요?",
+    "options": [
+      { "label": "꼭 챙긴다(의미 중시)", "value": "must_celebrate" },
+      { "label": "핵심 기념일만", "value": "key_only" },
+      { "label": "형식보다 마음(상황 따라)", "value": "flexible" },
+      { "label": "기념일에 크게 의미 없다", "value": "not_important" }
+    ]
+  },
+  {
+    "id": 91,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "상대가 애정 표현을 해줬다고 느끼는 '구체적인 방식' 3가지를 적어주세요. (예: 말, 스킨십, 선물, 시간, 도움 등)"
+  },
+  {
+    "id": 92,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "생활 패턴(기상/취침 시간)이 다를 때, 어떤 방식이 맞다고 보나요?",
+    "options": [
+      { "label": "가능하면 맞춘다", "value": "align" },
+      {
+        "label": "각자 유지하되 배려 규칙을 만든다",
+        "value": "separate_with_rules"
+      },
+      { "label": "각자 완전 자유", "value": "fully_separate" },
+      { "label": "상황에 따라", "value": "depends" }
+    ]
+  },
+  {
+    "id": 93,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "반려동물에 대한 입장은 무엇인가요?",
+    "options": [
+      { "label": "꼭 키우고 싶다", "value": "want_pet" },
+      { "label": "조건부 가능(종/비용/책임 합의)", "value": "conditional" },
+      { "label": "원하지 않는다", "value": "no_pet" },
+      { "label": "상대 의견에 맞춘다", "value": "flexible" }
+    ]
+  },
+  {
+    "id": 94,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "취미/덕질/개인활동에 쓰는 '시간과 비용'의 허용 범위를 정해봅시다. (예: 월 몇 시간/몇 만원)"
+  },
+  {
+    "id": 95,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "SNS/사생활 공개에 대한 기준은 무엇에 가깝나요?",
+    "options": [
+      {
+        "label": "개인 SNS는 자유(단, 상대 배려)",
+        "value": "free_with_respect"
+      },
+      { "label": "커플/가정 내용은 최소 공개", "value": "minimize_family" },
+      { "label": "서로 합의한 것만 공개", "value": "consent_only" },
+      { "label": "SNS 활동 자체가 거의 없다", "value": "rare_use" }
+    ]
+  },
+  {
+    "id": 96,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "집에서의 '청결 기준'은 어느 쪽에 가깝나요?",
+    "options": [
+      { "label": "매우 깔끔(바로 정리)", "value": "very_clean" },
+      { "label": "보통(주기적으로 정리)", "value": "normal" },
+      { "label": "조금 어질러져도 괜찮다", "value": "mess_ok" },
+      { "label": "청결보다 편안함이 우선", "value": "comfort_first" }
+    ]
+  },
+  {
+    "id": 97,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "상대의 생활 습관이 마음에 안 들 때, '바꾸고 싶다' vs '그대로 인정'의 기준은 무엇인가요? (예: 건강/위생/돈/존중)"
+  },
+  {
+    "id": 98,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "결혼 후에도 각자의 인간관계(친구/동호회/회식)를 유지하는 것에 대한 입장은 무엇인가요?",
+    "options": [
+      { "label": "각자 자유롭게 유지", "value": "independent" },
+      { "label": "서로 공유하되 자유", "value": "share_and_free" },
+      { "label": "가정 우선으로 줄이는 게 맞다", "value": "family_priority" },
+      { "label": "상황에 따라", "value": "depends" }
+    ]
+  },
+  {
+    "id": 99,
+    "category": "취향이해",
+    "type": "choice",
+    "question": "일과 삶의 균형에서 본인이 더 중요하게 두는 것은 무엇인가요?",
+    "options": [
+      { "label": "일(커리어/성취)", "value": "work" },
+      { "label": "삶(가정/휴식)", "value": "life" },
+      { "label": "균형(상황별 조정)", "value": "balance" },
+      { "label": "아직 잘 모르겠다", "value": "not_sure" }
+    ]
+  },
+  {
+    "id": 100,
+    "category": "취향이해",
+    "type": "essay",
+    "question": "결혼 후에도 '연인 같은 관계'를 유지하기 위해, 우리 커플이 매주/매월 반드시 할 행동 1가지를 정해 적어주세요."
+  }
+]
