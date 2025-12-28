@@ -212,3 +212,149 @@ If requirements are ambiguous:
 - Add a note in PR describing assumptions.
 
 End of contract.
+
+---
+
+# 13. Application Policy Contract (Marriage Quiz App)
+
+> This section defines PRODUCT & DATA policies.
+> Agents must implement features consistent with these policies and must not silently change them.
+> If a requested change conflicts with policies, explain the conflict in the PR description and propose the minimal compliant alternative.
+
+## 13.1 Product Goal & Non-Goals
+
+### Goal
+
+- Help engaged couples (예비부부) compare and discuss values by answering objective/subjective questions and sharing results with each other in a structured way.
+
+### Non-Goals (unless explicitly requested)
+
+- Not a “compatibility scoring / fortune-telling” app.
+- Not a counseling/therapy replacement.
+- Not a public SNS. Default is private, couple-to-couple.
+
+## 13.2 Core User Journey (MVP)
+
+1. User A creates a “Couple Space” (커플 스페이스) and gets an invite code/link.
+2. User B joins using the code/link.
+3. They answer question sets:
+   - Objective (single / multi choice)
+   - Subjective (free text)
+4. Results are shared within the Couple Space:
+   - show “my answer vs partner answer”
+   - highlight differences (diff) but do not judge
+5. They can bookmark items to discuss and add notes.
+
+Agents: any new UI/logic must map to one of the steps above, or be explicitly requested.
+
+## 13.3 Data Model (Conceptual)
+
+Use these domain terms consistently in code (naming may follow repo conventions):
+
+- `CoupleSpace`
+  - id, createdAt
+  - members: [UserRef, UserRef]
+  - status: `active | closed`
+- `Question`
+  - id, categoryId, type: `single | multi | text`
+  - prompt, choices? (for objective)
+- `Answer`
+  - id, coupleSpaceId, questionId, userId
+  - value: string | string[] (depending on question type)
+  - updatedAt
+- `DiscussionNote` (optional in MVP)
+  - id, coupleSpaceId, questionId
+  - body, createdBy, updatedAt
+
+Do not introduce additional models unless needed.
+
+## 13.4 Privacy & Sharing Rules (Hard Rules)
+
+- Default visibility is **private to the Couple Space**.
+- No public profiles, no public search, no public feeds.
+- Invite mechanism:
+  - Use short-lived invite codes/links where possible.
+  - Do not expose personal info inside invite link (no name/email).
+- Do not show partner’s answer before they submit (to avoid influence), unless explicitly requested.
+- Export/share outside the app (image/pdf/link) is OFF by default; if implemented, it must be explicit opt-in.
+
+## 13.5 Sensitive Content Handling (Hard Rules)
+
+Because subjective answers can include sensitive info:
+
+- Do not implement features that encourage collecting:
+  - 주민번호/계좌/카드번호, 여권번호 등 고위험 개인정보
+- If a user types such content, do not attempt to “process” it beyond normal display/storage.
+- If any AI summarization/recommendation is added later, it MUST be:
+  - opt-in
+  - clearly labeled
+  - avoid storing prompts/responses unnecessarily
+
+## 13.6 Question Content Policy
+
+- Categories should be neutral and discussion-oriented:
+  - finances, family, kids, living, values, communication, religion(optional), career, lifestyle, boundaries, chores
+- Avoid discriminatory or hateful prompts.
+- Avoid sexual explicit content by default.
+
+If adding seed questions, keep tone respectful and non-judgmental.
+
+## 13.7 UX Rules (Couples-first)
+
+- Always show both answers side-by-side once both submitted.
+- Highlight differences as “discussion points”, not “right/wrong”.
+- Provide “Talk about this” / “Bookmark for discussion” affordance.
+- Keep flows short; allow saving progress.
+
+## 13.8 Scoring Policy
+
+Default MVP: **no numeric compatibility score**.
+
+Allowed:
+
+- “Difference count” or “agreement rate” at a section level (e.g., 7/10 aligned)
+- But must be framed as “alignment overview”, not prediction.
+
+If a numeric score is introduced:
+
+- explain calculation in UI
+- avoid strong claims (“성공 확률” etc.)
+
+## 13.9 Account & Identity (MVP Friendly Defaults)
+
+- Prefer minimal sign-in requirements (configurable):
+  - anonymous local session OR simple login (email/social) depending on backend
+- Regardless of auth, Couple Space membership must remain 2-person bound in MVP.
+
+Agents: don’t add complex roles/admin systems.
+
+## 13.10 Offline / Local-First (Optional)
+
+If no backend exists yet:
+
+- Use local storage/indexedDB patterns already used in repo
+- Provide a clear boundary so backend migration is easy (repository/service layer)
+
+Do not build a “fake backend” with heavy new deps.
+
+## 13.11 Spec-Driven Development Workflow (How to implement features)
+
+For any feature PR, include a mini-spec in the PR description:
+
+- **User Story**: “As A/B, I want…, so that…”
+- **Acceptance Criteria** (checklist)
+- **Out of Scope**
+- **Data/Privacy Impact** (Yes/No + brief)
+- **How to Test** (commands + manual steps)
+
+In code, prefer:
+
+- a `spec` or `README` in the relevant feature folder only if repo already does this.
+- otherwise document in PR only.
+
+## 13.12 Feature Flags / Experiments
+
+Do not introduce a new experimentation system.
+If feature gating is needed, use the simplest existing pattern (env flag or config object).
+
+End of application policy contract.
