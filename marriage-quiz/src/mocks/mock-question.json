@@ -18,10 +18,7 @@
     "question": "결혼식 준비에서 '부모님 의견' 반영 수준은 어디까지가 적당하다고 보나요?",
     "options": [
       { "label": "부모님이 원하는 방향이 우선", "value": "parents_first" },
-      {
-        "label": "부모님 의견을 강하게 반영하되 최종은 우리",
-        "value": "strong_input"
-      },
+      { "label": "부모님 의견을 강하게 반영하되 최종은 우리", "value": "strong_input" },
       { "label": "필요한 부분만 참고(결정은 우리)", "value": "light_input" },
       { "label": "원칙적으로 부모님 개입은 최소", "value": "minimal_input" }
     ]
@@ -132,10 +129,7 @@
     "question": "동거에 대한 생각은 무엇에 더 가깝나요?",
     "options": [
       { "label": "결혼 전 동거 찬성", "value": "cohabit_yes" },
-      {
-        "label": "조건부 찬성(기간/규칙 필요)",
-        "value": "cohabit_conditional"
-      },
+      { "label": "조건부 찬성(기간/규칙 필요)", "value": "cohabit_conditional" },
       { "label": "반대(결혼 후가 좋다)", "value": "cohabit_no" },
       { "label": "상대가 원하면 맞춘다", "value": "cohabit_flexible" }
     ]
@@ -206,7 +200,6 @@
     "type": "essay",
     "question": "결혼을 결심하게 만든 '결정적 이유 1가지'와 결혼 후에도 유지하고 싶은 '우리만의 의식(루틴) 1가지'를 적어주세요."
   },
-
   {
     "id": 21,
     "category": "갈등해결",
@@ -245,10 +238,7 @@
     "options": [
       { "label": "그 자리에서 바로 정리한다", "value": "resolve_now" },
       { "label": "시간을 잡아 회의처럼 한다", "value": "scheduled_talk" },
-      {
-        "label": "문서/메모로 정리하고 이야기한다",
-        "value": "write_then_talk"
-      },
+      { "label": "문서/메모로 정리하고 이야기한다", "value": "write_then_talk" },
       { "label": "상담/코칭 같은 외부 도움을 받는다", "value": "external_help" }
     ]
   },
@@ -266,14 +256,8 @@
     "options": [
       { "label": "즉시 사과", "value": "immediate_apology" },
       { "label": "감정이 가라앉은 후 사과", "value": "after_cool" },
-      {
-        "label": "상황을 충분히 설명한 뒤 사과",
-        "value": "explain_then_apology"
-      },
-      {
-        "label": "행동으로 먼저 보여준 뒤 사과",
-        "value": "action_then_apology"
-      }
+      { "label": "상황을 충분히 설명한 뒤 사과", "value": "explain_then_apology" },
+      { "label": "행동으로 먼저 보여준 뒤 사과", "value": "action_then_apology" }
     ]
   },
   {
@@ -283,15 +267,9 @@
     "question": "갈등 중 '목소리 높임/비꼼/무시' 같은 표현에 대한 기준은 무엇인가요?",
     "options": [
       { "label": "절대 금지(한 번도 안 됨)", "value": "zero_tolerance" },
-      {
-        "label": "가끔은 나올 수 있으나 사과/회복이 필수",
-        "value": "recover_required"
-      },
+      { "label": "가끔은 나올 수 있으나 사과/회복이 필수", "value": "recover_required" },
       { "label": "감정이 격하면 어느 정도는 이해", "value": "understandable" },
-      {
-        "label": "표현 방식은 개인차라 크게 문제 아님",
-        "value": "not_big_deal"
-      }
+      { "label": "표현 방식은 개인차라 크게 문제 아님", "value": "not_big_deal" }
     ]
   },
   {
@@ -420,7 +398,6 @@
     "type": "essay",
     "question": "갈등이 있어도 이 관계를 유지하고 싶은 이유를 '한 문장'으로 적어주세요. (힘들 때 꺼내볼 문장)"
   },
-
   {
     "id": 41,
     "category": "육아",
@@ -536,10 +513,7 @@
     "question": "육아로 인해 커리어 조정이 필요할 때, 기본 원칙은 무엇이 맞다고 보나요?",
     "options": [
       { "label": "수입이 낮은 쪽이 조정", "value": "lower_income_adjust" },
-      {
-        "label": "커리어 성장 가능성이 낮은 쪽이 조정",
-        "value": "lower_growth_adjust"
-      },
+      { "label": "커리어 성장 가능성이 낮은 쪽이 조정", "value": "lower_growth_adjust" },
       { "label": "둘 다 일부씩 조정(공동 부담)", "value": "both_adjust" },
       { "label": "외부 돌봄을 써서 커리어는 유지", "value": "keep_career" }
     ]
@@ -570,10 +544,7 @@
     "options": [
       { "label": "절대 아이 앞에서는 금지", "value": "never_in_front" },
       { "label": "감정 폭발은 금지, 차분한 대화는 가능", "value": "calm_ok" },
-      {
-        "label": "아이에게도 갈등 해결을 보여주는 게 교육",
-        "value": "model_resolution"
-      },
+      { "label": "아이에게도 갈등 해결을 보여주는 게 교육", "value": "model_resolution" },
       { "label": "상황에 따라 다르다", "value": "depends" }
     ]
   },
@@ -625,7 +596,6 @@
     "type": "essay",
     "question": "자녀가 성인이 되었을 때, 어떤 부모로 기억되고 싶나요? (키워드 3개 + 짧은 이유)"
   },
-
   {
     "id": 61,
     "category": "자산관리",
@@ -694,10 +664,7 @@
     "options": [
       { "label": "각자 고정 용돈(정액)", "value": "fixed_allowance" },
       { "label": "수입 비율에 따라 용돈도 비율", "value": "ratio_allowance" },
-      {
-        "label": "용돈 개념 없이 자유(대신 큰돈만 합의)",
-        "value": "free_with_threshold"
-      },
+      { "label": "용돈 개념 없이 자유(대신 큰돈만 합의)", "value": "free_with_threshold" },
       { "label": "필요할 때 요청/협의", "value": "request_based" }
     ]
   },
@@ -713,18 +680,9 @@
     "type": "choice",
     "question": "비상금(각자 숨겨둔 돈)에 대해 어떻게 생각하나요?",
     "options": [
-      {
-        "label": "원칙적으로 비상금도 공유해야 함",
-        "value": "share_emergency"
-      },
-      {
-        "label": "각자 비상금은 허용(상호 인지)",
-        "value": "allowed_disclosed"
-      },
-      {
-        "label": "각자 비상금은 허용(서로 몰라도 됨)",
-        "value": "allowed_private"
-      },
+      { "label": "원칙적으로 비상금도 공유해야 함", "value": "share_emergency" },
+      { "label": "각자 비상금은 허용(상호 인지)", "value": "allowed_disclosed" },
+      { "label": "각자 비상금은 허용(서로 몰라도 됨)", "value": "allowed_private" },
       { "label": "상황에 따라(신뢰/재정상태 따라)", "value": "depends" }
     ]
   },
@@ -752,10 +710,7 @@
     "type": "choice",
     "question": "재무 현황(수입/지출/자산/부채)을 서로 공개하는 수준은 어느 정도가 좋나요?",
     "options": [
-      {
-        "label": "전부 투명 공개(계좌/대출 포함)",
-        "value": "full_transparent"
-      },
+      { "label": "전부 투명 공개(계좌/대출 포함)", "value": "full_transparent" },
       { "label": "큰 틀만 공유(총액 중심)", "value": "high_level" },
       { "label": "필요할 때만 공유", "value": "on_demand" },
       { "label": "각자 관리하되 문제 생기면 공유", "value": "issue_based" }
@@ -786,10 +741,7 @@
     "question": "배우자의 투자/소비로 손실이 발생했을 때, 책임은 어떻게 보는 편인가요?",
     "options": [
       { "label": "공동 책임(부부는 한 팀)", "value": "joint_responsibility" },
-      {
-        "label": "합의한 건 공동, 합의 안 한 건 개인",
-        "value": "agreed_only_joint"
-      },
+      { "label": "합의한 건 공동, 합의 안 한 건 개인", "value": "agreed_only_joint" },
       { "label": "원칙적으로 개인 책임", "value": "personal_responsibility" },
       { "label": "상황/규모에 따라 협의", "value": "situational" }
     ]
@@ -842,7 +794,6 @@
     "type": "essay",
     "question": "돈에 대해 내가 가장 불안해하는 포인트 1가지와, 그 불안을 줄이기 위한 '부부 합의안'을 한 줄로 적어주세요."
   },
-
   {
     "id": 81,
     "category": "취향이해",
@@ -958,10 +909,7 @@
     "question": "생활 패턴(기상/취침 시간)이 다를 때, 어떤 방식이 맞다고 보나요?",
     "options": [
       { "label": "가능하면 맞춘다", "value": "align" },
-      {
-        "label": "각자 유지하되 배려 규칙을 만든다",
-        "value": "separate_with_rules"
-      },
+      { "label": "각자 유지하되 배려 규칙을 만든다", "value": "separate_with_rules" },
       { "label": "각자 완전 자유", "value": "fully_separate" },
       { "label": "상황에 따라", "value": "depends" }
     ]
@@ -990,10 +938,7 @@
     "type": "choice",
     "question": "SNS/사생활 공개에 대한 기준은 무엇에 가깝나요?",
     "options": [
-      {
-        "label": "개인 SNS는 자유(단, 상대 배려)",
-        "value": "free_with_respect"
-      },
+      { "label": "개인 SNS는 자유(단, 상대 배려)", "value": "free_with_respect" },
       { "label": "커플/가정 내용은 최소 공개", "value": "minimize_family" },
       { "label": "서로 합의한 것만 공개", "value": "consent_only" },
       { "label": "SNS 활동 자체가 거의 없다", "value": "rare_use" }

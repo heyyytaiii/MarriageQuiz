@@ -7,7 +7,6 @@ import {
   CardTitle,
   Description,
   Eyebrow,
-  Guidance,
   Option,
   OptionGroup,
   OptionRadio,
@@ -22,38 +21,45 @@ import {
 } from './design-system/components'
 import { GlobalStyles, css, cx } from './design-system/emotion-lite'
 import { globalStyles } from './design-system/global-styles'
-import type { Question, QuestionSection } from './types'
-import questionData from './mocks/mock-question.json'
+import type { Question } from './types'
+import { MOCK_QUESTION } from './mocks/mock-question'
 
 type QuestionWithSection = Question & {
   sectionId: string
   sectionTitle: string
-  sectionDescription: string
   orderInSection: number
   totalInSection: number
 }
 
-const flow: QuestionWithSection[] = (questionData.sections as QuestionSection[]).flatMap((section) =>
-  section.questions.map((question, index) => ({
-    ...question,
-    sectionId: section.id,
-    sectionTitle: section.title,
-    sectionDescription: section.description,
-    orderInSection: index + 1,
-    totalInSection: section.questions.length,
-  })),
-)
+const groupQuestionsByCategory = (questions: Question[]): QuestionWithSection[] => {
+  const categoryOrder: string[] = []
+  const grouped = questions.reduce<Record<string, Question[]>>((acc, question) => {
+    if (!acc[question.category]) {
+      acc[question.category] = []
+      categoryOrder.push(question.category)
+    }
+    acc[question.category].push(question)
+    return acc
+  }, {})
+
+  return categoryOrder.flatMap((category) =>
+    grouped[category].map((question, index) => ({
+      ...question,
+      sectionId: category,
+      sectionTitle: category,
+      orderInSection: index + 1,
+      totalInSection: grouped[category].length,
+    })),
+  )
+}
+
+const flow: QuestionWithSection[] = groupQuestionsByCategory(MOCK_QUESTION)
 
 const questionHeader = css`
   display: flex;
   gap: 12px;
   align-items: flex-start;
   flex-wrap: wrap;
-`
-
-const wideHeader = css`
-  align-items: center;
-  justify-content: space-between;
 `
 
 const sectionMeta = css`
@@ -79,23 +85,29 @@ const answerMeta = css`
   font-size: 14px;
 `
 
-const answeredDot = css`
+const dotBase = css`
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #2563eb;
 `
 
-const pendingDot = css`
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #e2e8f0;
-`
+const answeredDot = cx(
+  dotBase,
+  css`
+    background: #2563eb;
+  `,
+)
+
+const pendingDot = cx(
+  dotBase,
+  css`
+    background: #e2e8f0;
+  `,
+)
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [answers, setAnswers] = useState<Record<number, string>>({})
 
   const answeredCount = useMemo(
     () => flow.filter((question) => (answers[question.id]?.trim() ?? '').length > 0).length,
@@ -114,7 +126,7 @@ function App() {
     [answers, currentQuestion.sectionId],
   )
 
-  const handleAnswerChange = (id: string, value: string) => {
+  const handleAnswerChange = (id: number, value: string) => {
     setAnswers((prev) => ({ ...prev, [id]: value }))
   }
 
@@ -135,6 +147,8 @@ function App() {
   const questionProgress = `${currentIndex + 1}/${flow.length}`
   const hasAnswer = (answers[currentQuestion.id]?.trim() ?? '').length > 0
 
+  const questionTypeLabel = currentQuestion.type === 'choice' ? '객관식' : '서술형'
+
   return (
     <>
       <GlobalStyles styles={globalStyles} />
@@ -143,7 +157,7 @@ function App() {
           <div>
             <Eyebrow>Marriage Quiz · 디자인 시스템</Eyebrow>
             <Title>예비 부부 모의고사</Title>
-            <Subtitle>{currentQuestion.sectionDescription}</Subtitle>
+            <Subtitle>{currentQuestion.sectionTitle} 섹션 진행 중</Subtitle>
           </div>
           <div className={sectionMeta}>
             <Badge>{currentQuestion.sectionTitle}</Badge>
@@ -153,35 +167,34 @@ function App() {
         </PageHeader>
 
         <Card>
-          <div className={cx(questionHeader, currentQuestion.type === 'text' && wideHeader)}>
-            <Badge>{currentQuestion.type === 'single' ? '객관식' : '주관식'}</Badge>
+          <div className={questionHeader}>
+            <Badge>{questionTypeLabel}</Badge>
             <div>
-              <CardTitle>{currentQuestion.prompt}</CardTitle>
-              <Description>{currentQuestion.description}</Description>
+              <CardTitle>{currentQuestion.question}</CardTitle>
+              <Description>카테고리 · {currentQuestion.category}</Description>
             </div>
           </div>
 
-          {currentQuestion.type === 'single' ? (
+          {currentQuestion.type === 'choice' && currentQuestion.options ? (
             <OptionGroup>
               {currentQuestion.options.map((option) => (
-                <Option key={option} selected={answers[currentQuestion.id] === option}>
+                <Option key={option.value} selected={answers[currentQuestion.id] === option.value}>
                   <OptionRadio
-                    name={currentQuestion.id}
-                    value={option}
-                    checked={answers[currentQuestion.id] === option}
+                    name={String(currentQuestion.id)}
+                    value={option.value}
+                    checked={answers[currentQuestion.id] === option.value}
                     onChange={(event) => handleAnswerChange(currentQuestion.id, event.target.value)}
                   />
-                  <OptionText>{option}</OptionText>
+                  <OptionText>{option.label}</OptionText>
                 </Option>
               ))}
             </OptionGroup>
           ) : (
             <TextAnswer>
-              <Guidance>{currentQuestion.guidance}</Guidance>
               <StyledTextarea
                 value={answers[currentQuestion.id] ?? ''}
                 onChange={(event) => handleAnswerChange(currentQuestion.id, event.target.value)}
-                placeholder="합의 과정을 적어주세요"
+                placeholder="생각을 자유롭게 적어주세요"
                 rows={4}
               />
             </TextAnswer>
