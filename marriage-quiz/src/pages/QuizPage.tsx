@@ -16,7 +16,7 @@ import {
   Page,
   PageHeader,
   Progress,
-  StyledTextarea,
+  StyledTextInput,
   Subtitle,
   TextAnswer,
   Title,
@@ -67,20 +67,6 @@ const questionHeader = css`
   gap: 12px;
   align-items: flex-start;
   flex-wrap: wrap;
-`;
-
-const sectionMeta = css`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-`;
-
-const sectionProgressText = css`
-  color: #0f172a;
-  font-weight: 700;
-  font-size: 14px;
 `;
 
 const answerMeta = css`
@@ -174,15 +160,6 @@ function QuizPage() {
       flowState.findIndex((question) => String(question.id) === funnel.step),
     [funnel.step, flowState]
   );
-  const currentSectionAnswered = useMemo(
-    () =>
-      flowState.filter(
-        (question) =>
-          question.sectionId === currentQuestion.sectionId &&
-          (answers[question.id]?.trim() ?? "").length > 0
-      ).length,
-    [answers, currentQuestion.sectionId, flowState]
-  );
 
   const handleAnswerChange = (id: number, value: string) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -219,14 +196,6 @@ function QuizPage() {
     });
   };
 
-  const handleBackToStart = () => {
-    if (!questionSteps[0]) return;
-    funnel.history.push(questionSteps[0], stepContexts[questionSteps[0]]);
-  };
-
-  const sectionProgress = `${currentSectionAnswered}/${
-    currentQuestion?.totalInSection ?? 0
-  }`;
   const questionProgress = `${(currentIndex >= 0 ? currentIndex : 0) + 1}/${
     flowState.length
   }`;
@@ -300,15 +269,9 @@ function QuizPage() {
         <div>
           <Eyebrow>Marriage Quiz · 디자인 시스템</Eyebrow>
           <Title>예비 부부 모의고사</Title>
-          <Subtitle>{currentQuestion.sectionTitle} 섹션 진행 중</Subtitle>
+          <Subtitle>진행 중인 질문 {questionProgress}</Subtitle>
         </div>
-        <div className={sectionMeta}>
-          <Badge>{currentQuestion.sectionTitle}</Badge>
-          <span className={sectionProgressText}>
-            섹션 진행 {sectionProgress}
-          </span>
-          <Progress label="전체 진행" value={questionProgress} />
-        </div>
+        <Progress label="전체 진행" value={questionProgress} />
       </PageHeader>
 
       {currentQuestion && (
@@ -344,13 +307,16 @@ function QuizPage() {
             </OptionGroup>
           ) : (
             <TextAnswer>
-              <StyledTextarea
+              <StyledTextInput
+                key={currentQuestion.id}
                 value={answers[currentQuestion.id] ?? ""}
                 onChange={(event) =>
                   handleAnswerChange(currentQuestion.id, event.target.value)
                 }
                 placeholder="생각을 자유롭게 적어주세요"
-                rows={4}
+                inputMode="text"
+                autoFocus
+                enterKeyHint={isLastQuestion ? "done" : "next"}
               />
             </TextAnswer>
           )}
@@ -359,7 +325,7 @@ function QuizPage() {
               className={hasAnswer ? answeredDot : pendingDot}
               aria-hidden
             />
-            {hasAnswer ? "답변이 저장되었습니다." : "답변을 입력해 주세요."}
+            {hasAnswer ? "답변이 저장되었어요." : "답변을 입력해 주세요."}
           </div>
         </Card>
       )}
@@ -377,17 +343,9 @@ function QuizPage() {
           variant="primary"
           type="button"
           onClick={handleNext}
-          disabled={!hasAnswer || isLastQuestion}
+          disabled={isLastQuestion}
         >
           {isLastQuestion ? "마지막 질문" : "다음 질문으로"}
-        </Button>
-        <Button
-          variant="secondary"
-          type="button"
-          onClick={handleBackToStart}
-          disabled={isFirst}
-        >
-          처음 질문으로
         </Button>
       </Actions>
       <Subtitle>
