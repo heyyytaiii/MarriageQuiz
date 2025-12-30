@@ -13,6 +13,7 @@ const page = css`
     max-width: 960px;
     margin: 0 auto;
     padding: ${theme.spacing(12)} ${theme.spacing(5)} ${theme.spacing(18)};
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     gap: ${theme.spacing(8)};
@@ -189,7 +190,7 @@ const textInputClass = css`
     border-radius: ${theme.radius.md};
     border: 1px solid ${theme.colors.border};
     padding: ${theme.spacing(3)};
-    font-size: 14px;
+    font-size: 16px;
     line-height: ${theme.typography.body.lineHeight};
     font-family: ${theme.fontFamily};
     background: #fff;
@@ -210,7 +211,7 @@ const textareaClass = css`
     border-radius: ${theme.radius.md};
     border: 1px solid ${theme.colors.border};
     padding: ${theme.spacing(3)};
-    font-size: 14px;
+    font-size: 16px;
     line-height: ${theme.typography.body.lineHeight};
     resize: vertical;
     min-height: 120px;
@@ -274,7 +275,8 @@ const actions = css`
   & {
     display: flex;
     gap: ${theme.spacing(3)};
-    justify-content: flex-end;
+    justify-content: center;
+    width: 100%;
   }
 `
 
@@ -424,7 +426,9 @@ export const FeedbackStatus = ({ children }: { children: ReactNode }) => (
   <span className={feedbackStatus}>{children}</span>
 )
 
-export const Actions = ({ children }: { children: ReactNode }) => <footer className={actions}>{children}</footer>
+export const Actions = ({ children, className }: { children: ReactNode; className?: string }) => (
+  <footer className={cx(actions, className)}>{children}</footer>
+)
 
 export const Button = ({
   variant,

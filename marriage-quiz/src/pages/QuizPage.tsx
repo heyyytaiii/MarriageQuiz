@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFunnel } from "@use-funnel/react-router-dom";
 import {
@@ -76,6 +76,7 @@ const answerMeta = css`
   padding: 8px 0;
   color: #475569;
   font-size: 14px;
+  min-height: 28px;
 `;
 
 const dotBase = css`
@@ -98,24 +99,24 @@ const pendingDot = cx(
   `
 );
 
-const toast = css`
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  background: #0f172a;
-  color: #ffffff;
-  padding: 12px 16px;
-  border-radius: 10px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
-  font-weight: 700;
-  font-size: 14px;
+const layout = css`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+`;
+
+const questionPanel = css`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 320px;
+  justify-content: space-between;
 `;
 
 function QuizPage() {
   const [flowState] = useState(flow);
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const toastTimerRef = useRef<number | null>(null);
   const { hasParticipated, markParticipated, resetParticipation } =
     useParticipationStatus();
   const navigate = useNavigate();
@@ -165,22 +166,8 @@ function QuizPage() {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   };
 
-  const showToast = (message: string) => {
-    if (toastTimerRef.current) {
-      window.clearTimeout(toastTimerRef.current);
-    }
-    setToastMessage(message);
-    toastTimerRef.current = window.setTimeout(
-      () => setToastMessage(null),
-      2200
-    );
-  };
-
   const handleNext = () => {
-    if (!hasAnswer) {
-      showToast("답변을 입력해야 다음으로 이동할 수 있어요.");
-      return;
-    }
+    if (!hasAnswer) return;
     if (isLastQuestion) return;
     const nextQuestion = flowState[currentIndex + 1];
     funnel.history.push(String(nextQuestion.id), {
@@ -211,15 +198,6 @@ function QuizPage() {
       markParticipated();
     }
   }, [hasParticipated, isComplete, markParticipated]);
-
-  useEffect(
-    () => () => {
-      if (toastTimerRef.current) {
-        window.clearTimeout(toastTimerRef.current);
-      }
-    },
-    []
-  );
 
   const handleRetake = () => {
     resetParticipation();
@@ -266,92 +244,90 @@ function QuizPage() {
   return (
     <Page>
       <PageHeader>
-        <div>
-          <Eyebrow>Marriage Quiz · 디자인 시스템</Eyebrow>
-          <Title>예비 부부 모의고사</Title>
-          <Subtitle>진행 중인 질문 {questionProgress}</Subtitle>
-        </div>
+        <Subtitle>질문 진행 {questionProgress}</Subtitle>
         <Progress label="전체 진행" value={questionProgress} />
       </PageHeader>
 
-      {currentQuestion && (
-        <Card>
-          <div className={questionHeader}>
-            <Badge>
-              {currentQuestion.type === "choice" ? "객관식" : "서술형"}
-            </Badge>
-            <div>
-              <CardTitle>{currentQuestion.question}</CardTitle>
-              <Description>카테고리 · {currentQuestion.category}</Description>
-            </div>
-          </div>
+      <div className={layout}>
+        {currentQuestion && (
+          <Card>
+            <div className={questionPanel}>
+              <div className={questionHeader}>
+                <Badge>
+                  {currentQuestion.type === "choice" ? "객관식" : "서술형"}
+                </Badge>
+                <div>
+                  <CardTitle>{currentQuestion.question}</CardTitle>
+                  <Description>카테고리 · {currentQuestion.category}</Description>
+                </div>
+              </div>
 
-          {currentQuestion.type === "choice" && currentQuestion.options ? (
-            <OptionGroup>
-              {currentQuestion.options.map((option) => (
-                <Option
-                  key={option.value}
-                  selected={answers[currentQuestion.id] === option.value}
-                >
-                  <OptionRadio
-                    name={String(currentQuestion.id)}
-                    value={option.value}
-                    checked={answers[currentQuestion.id] === option.value}
+              {currentQuestion.type === "choice" && currentQuestion.options ? (
+                <OptionGroup>
+                  {currentQuestion.options.map((option) => (
+                    <Option
+                      key={option.value}
+                      selected={answers[currentQuestion.id] === option.value}
+                    >
+                      <OptionRadio
+                        name={String(currentQuestion.id)}
+                        value={option.value}
+                        checked={answers[currentQuestion.id] === option.value}
+                        onChange={(event) =>
+                          handleAnswerChange(
+                            currentQuestion.id,
+                            event.target.value
+                          )
+                        }
+                      />
+                      <OptionText>{option.label}</OptionText>
+                    </Option>
+                  ))}
+                </OptionGroup>
+              ) : (
+                <TextAnswer>
+                  <StyledTextInput
+                    key={currentQuestion.id}
+                    value={answers[currentQuestion.id] ?? ""}
                     onChange={(event) =>
                       handleAnswerChange(currentQuestion.id, event.target.value)
                     }
+                    placeholder="생각을 자유롭게 적어주세요"
+                    inputMode="text"
+                    enterKeyHint={isLastQuestion ? "done" : "next"}
                   />
-                  <OptionText>{option.label}</OptionText>
-                </Option>
-              ))}
-            </OptionGroup>
-          ) : (
-            <TextAnswer>
-              <StyledTextInput
-                key={currentQuestion.id}
-                value={answers[currentQuestion.id] ?? ""}
-                onChange={(event) =>
-                  handleAnswerChange(currentQuestion.id, event.target.value)
-                }
-                placeholder="생각을 자유롭게 적어주세요"
-                inputMode="text"
-                autoFocus
-                enterKeyHint={isLastQuestion ? "done" : "next"}
-              />
-            </TextAnswer>
-          )}
-          <div className={answerMeta}>
-            <span
-              className={hasAnswer ? answeredDot : pendingDot}
-              aria-hidden
-            />
-            {hasAnswer ? "답변이 저장되었어요." : "답변을 입력해 주세요."}
-          </div>
-        </Card>
-      )}
+                </TextAnswer>
+              )}
+              <div className={answerMeta}>
+                <span
+                  className={hasAnswer ? answeredDot : pendingDot}
+                  aria-hidden
+                />
+                {!hasAnswer && "답변을 입력해 주세요."}
+              </div>
+            </div>
+          </Card>
+        )}
 
-      <Actions>
-        <Button
-          variant="secondary"
-          type="button"
-          onClick={handlePrev}
-          disabled={isFirst}
-        >
-          이전 질문
-        </Button>
-        <Button
-          variant="primary"
-          type="button"
-          onClick={handleNext}
-          disabled={isLastQuestion}
-        >
-          {isLastQuestion ? "마지막 질문" : "다음 질문으로"}
-        </Button>
-      </Actions>
-      <Subtitle>
-        응답 완료: {answeredCount}/{flow.length}
-      </Subtitle>
-      {toastMessage && <div className={toast}>{toastMessage}</div>}
+        <Actions>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={handlePrev}
+            disabled={isFirst}
+          >
+            이전 질문
+          </Button>
+          <Button
+            variant="primary"
+            type="button"
+            onClick={handleNext}
+            disabled={!hasAnswer || isLastQuestion}
+          >
+            {isLastQuestion ? "마지막 질문" : "다음 질문으로"}
+          </Button>
+        </Actions>
+      </div>
     </Page>
   );
 }
