@@ -183,6 +183,27 @@ const guidance = css`
   }
 `
 
+const textInputClass = css`
+  & {
+    width: 100%;
+    border-radius: ${theme.radius.md};
+    border: 1px solid ${theme.colors.border};
+    padding: ${theme.spacing(3)};
+    font-size: 14px;
+    line-height: ${theme.typography.body.lineHeight};
+    font-family: ${theme.fontFamily};
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+  }
+
+  &:focus {
+    outline: 2px solid ${theme.colors.primary[200]};
+    border-color: ${theme.colors.primary[200]};
+    box-shadow: ${theme.shadow.sm};
+  }
+`
+
 const textareaClass = css`
   & {
     width: 100%;
@@ -381,6 +402,10 @@ export const TextAnswer = ({ children }: { children: ReactNode }) => (
 
 export const Guidance = ({ children }: { children: ReactNode }) => (
   <p className={guidance}>{children}</p>
+)
+
+export const StyledTextInput = (props: InputHTMLAttributes<HTMLInputElement>) => (
+  <input className={textInputClass} {...props} />
 )
 
 export const StyledTextarea = (props: TextareaHTMLAttributes<HTMLTextAreaElement>) => (
